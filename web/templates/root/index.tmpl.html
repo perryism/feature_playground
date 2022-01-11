@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <h1>Sources</h1>
+
+    {% for source in sources %}
+    <ul>
+    <li><a href="/source/{{source[0]}}">{{source[1]}}</a></li>
+    </ul>
+    {% endfor %}
+{% endblock %}
