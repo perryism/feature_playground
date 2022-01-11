@@ -19,5 +19,5 @@ class SourceUploader:
         filename = secure_filename(file.filename)
         location = os.path.join(self.upload_folder, filename)
         file.save(location) 
-        Source().insert(name=name, location=location)
+        Source.insert(name=name, location=location)
         return filename

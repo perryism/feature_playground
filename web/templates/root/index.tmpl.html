@@ -5,7 +5,7 @@
 
     {% for source in sources %}
     <ul>
-    <li><a href="/source/{{source[0]}}">{{source[1]}}</a></li>
+    <li><a href="/source/{{source.id}}">{{source.name}}</a></li>
     </ul>
     {% endfor %}
 {% endblock %}

@@ -1,6 +1,7 @@
 import sqlite3
 
 from contextlib import contextmanager
+from dataclasses import dataclass
 
 @contextmanager
 def execute(sql, args=()):
@@ -10,12 +11,23 @@ def execute(sql, args=()):
     yield (cur, con)
     con.close()
 
+@dataclass
 class Source:
-    @staticmethod
-    def all():
-        with execute("SELECT id, name, location FROM source") as (cur, con):
-            return cur.fetchall()
+    id: int
+    name: str
+    location: str
 
+    @classmethod
+    def all(cls):
+        with execute("SELECT id, name, location FROM source") as (cur, con):
+            return [cls._row_to_obj(row) for row in cur.fetchall()]
+
+    @staticmethod
     def insert(self, **args):
         with execute("INSERT INTO source (name, location) VALUES (?, ?)", (args["name"], args["location"])) as (cur, con):
             con.commit()
+
+    @staticmethod
+    def _row_to_obj(row):
+        return Source(id=row[0], name=row[1], location=row[2])
+
