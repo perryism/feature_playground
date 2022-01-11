@@ -11,8 +11,8 @@ from .libs.source_uploader import SourceUploader
 def index():
     return render_template("root/index.tmpl.html", sources=Source.all()) 
 
-@app.route("/source", methods=["GET", "POST"])
-def source():
+@app.route("/source/", methods=["GET", "POST"])
+def upload():
     #https://flask.palletsprojects.com/en/2.0.x/patterns/fileuploads/
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -31,3 +31,8 @@ def source():
             return redirect("/")
     else:
         return render_template("source/index.tmpl.html")
+
+@app.route("/source/<int:source_id>", methods=["GET", "POST"])
+def source(source_id):
+    source = Source.find_by_id(source_id)
+    return render_template("source/view.tmpl.html", source=source) 
