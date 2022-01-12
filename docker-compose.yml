@@ -5,5 +5,15 @@ services:
       - "5000:5000"
     environment:
       - FLASK_ENV=development
+      - DATABASE_ROOT=/app
+    volumes:
+      - $PWD:/app
+  streamlit:
+    build: .
+    command: python -m streamlit run streamlit_app.py
+    ports:
+      - "8501:8501"
+    environment:
+      - DATABASE_ROOT=/app
     volumes:
       - $PWD:/app

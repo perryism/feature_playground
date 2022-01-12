@@ -1,11 +1,13 @@
 import sqlite3
-
 from contextlib import contextmanager
 from dataclasses import dataclass
+import os
+import pandas as pd
 
 @contextmanager
 def execute(sql, args=()):
-    con = sqlite3.connect('/app/features.db')
+    root = os.environ["DATABASE_ROOT"]
+    con = sqlite3.connect(os.path.join(root,'features.db'))
     cur = con.cursor() 
     cur.execute(sql, args)
     yield (cur, con)
@@ -23,7 +25,7 @@ class Source:
             return [cls._row_to_obj(row) for row in cur.fetchall()]
 
     @staticmethod
-    def insert(self, **args):
+    def insert(**args):
         with execute("INSERT INTO source (name, location) VALUES (?, ?)", (args["name"], args["location"])) as (cur, con):
             con.commit()
 
@@ -36,3 +38,6 @@ class Source:
     @staticmethod
     def _row_to_obj(row):
         return Source(id=row[0], name=row[1], location=row[2])
+
+    def dataframe(self):
+        return pd.read_csv(self.location)
