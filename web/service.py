@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 from entities import Source
 from flask import render_template 
-from .libs.source_uploader import SourceUploader 
+from .libs.csv_uploader import CsvUploader 
 
 @app.route('/')
 def index():
@@ -25,8 +25,8 @@ def upload():
             flash('No selected file')
             return redirect(request.url)
 
-        if SourceUploader.allow(file):
-            filename = SourceUploader(os.environ["UPLOAD_FOLDER"]).save(request.form["name"], file)
+        if CsvUploader.allow(file):
+            filename = CsvUploader(os.environ["UPLOAD_FOLDER"]).save(request.form["name"], file)
             #filename = SourceUploader(app.config['UPLOAD_FOLDER']).save(file)
             return redirect("/")
     else:

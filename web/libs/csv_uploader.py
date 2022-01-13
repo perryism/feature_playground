@@ -4,9 +4,9 @@ import os
 
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in SourceUploader.ALLOWED_EXTENSIONS
+           filename.rsplit('.', 1)[1].lower() in CsvUploader.ALLOWED_EXTENSIONS
 
-class SourceUploader:
+class CsvUploader:
     ALLOWED_EXTENSIONS = {'csv'}
     @staticmethod
     def allow(file):
