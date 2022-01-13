@@ -6,7 +6,7 @@ cur = con.cursor()
 
 # Create table
 cur.execute('''CREATE TABLE source
-               (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name text, location text)''')
+               (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name text, location text, type text)''')
 
 import shutil
 
@@ -17,7 +17,15 @@ csv_data = {
 }
 
 for k, v in csv_data.items():
-    cur.execute("INSERT INTO source (name, location) VALUES (?, ?)", (k,v))
+    cur.execute("INSERT INTO source (name, location, type) VALUES (?, ?, ?)", (k,v, "csv"))
+
+sql = """SELECT * 
+FROM iris 
+"""
+
+cur.execute("""
+INSERT INTO source(name, location, type) VALUES(?, ?, ?)
+""", ("iris", sql, "sqlite"))
 
 # Save (commit) the changes
 con.commit()
