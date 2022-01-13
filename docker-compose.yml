@@ -9,6 +9,8 @@ services:
     volumes:
       - $PWD:/app
   streamlit:
+    profiles:
+      - donotstart
     build: .
     command: python -m streamlit run streamlit_app.py
     ports:
@@ -17,3 +19,10 @@ services:
       - DATABASE_ROOT=/app
     volumes:
       - $PWD:/app
+  nuclio:
+    image: quay.io/nuclio/dashboard:stable-amd64
+    ports:
+      - "8070:8070"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp:/tmp

@@ -5,6 +5,7 @@ from io import StringIO
 import pandas as pd
 import logging
 from entities import Source
+from libs.nuclio import *
 
 logging.basicConfig(filename='logs/test.log', encoding='utf-8', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -22,26 +23,16 @@ query_params = st.experimental_get_query_params()
 logging.info(query_params)
 sources = Source.all()
 options = [ f"{s.name}({s.id})" for s in sources ]
+
+#FIXME: don't try/except as control flow
 try:
-  query_option = query_params['source_id'][0]
-  import re
-  source_id = int(re.search("(\d+)", query_option).group())
+  source_id = int(query_params['source_id'][0])
   logging.info("source_id %s"%source_id)
-  option_index = options.index(query_option)
 except BaseException as err:
   logging.error(err)
-  option_index = 1 
   source_id = 1
 
-logging.info("option_index %s"%option_index)
-option_selected = st.sidebar.selectbox('Pick option',
-                                        options,
-                                        index=option_index)
-st.experimental_set_query_params(option=option_selected)
-
-st.header('Create feature')
-
-logging.info("source_id %s"%source_id)
+st.header('Feature engineering')
 s = Source.find_by_id(int(source_id))
 df = s.dataframe()
 st.dataframe(df)
@@ -50,7 +41,8 @@ st.subheader("Put your code here")
 
 st.text("Example")
 st.code("""import numpy as np
-def execute(col1, col2):
+def execute(row):
+    col1 = row["col1"]
     print(col1, np.isnan(col1))
     if np.isnan(col1):
         return 1
@@ -58,9 +50,8 @@ def execute(col1, col2):
         return col1 - col2
     """)
 
-content = None
-if not st.button('Use feature as is'):
-    content = st_ace()
+
+content = st_ace()
 
 from libs.code import parse
 # Display editor's content as you type
