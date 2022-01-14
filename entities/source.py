@@ -40,6 +40,8 @@ class Source:
     def _row_to_obj(row):
         if row[3] == "csv":
             return Source(id=row[0], name=row[1], location=row[2], type=row[3])
+        elif row[3] == "bigquery":
+            return BigQuerySource(id=row[0], name=row[1], location=row[2])
         elif row[3] == "sqlite":
             return SqlSource(id=row[0], name=row[1], location=row[2])
 
@@ -51,9 +53,29 @@ class SqlSource:
     id: int
     name: str
     location: str
+    type: str = "sqlite"
 
     def dataframe(self):
         #FIXME: don't hardcore the values
         cnx = sqlite3.connect("data/iris.sqlite")
         return pd.read_sql_query("SELECT * FROM iris", cnx)
 
+
+from google.cloud import bigquery
+
+"""
+SELECT * FROM `prosper-mlops-poc.Features.tbl_features_all` 
+"""
+#https://cloud.google.com/bigquery/docs/reference/libraries
+@dataclass
+class BigQuerySource:
+    id: int
+    name: str
+    location: str
+    type: str = "bigquery"
+
+    #limit
+    def dataframe(self, limit=10):
+        bqclient = bigquery.Client()
+        #FIXME: the limit is a bit hacky
+        return bqclient.query("%s LIMIT %d"%(self.location, limit)).result().to_dataframe()

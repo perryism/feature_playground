@@ -1,7 +1,8 @@
 from flask import Flask, flash, request, redirect, url_for
 import os
 
-app = Flask(__name__)
+static_folder = os.environ.get("STATIC_FOLDER", "/static")
+app = Flask(__name__)#, static_url_path='', static_folder=static_folder)
 
 from entities import Source
 from flask import render_template 

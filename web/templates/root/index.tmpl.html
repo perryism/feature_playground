@@ -1,11 +1,22 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h1>Sources</h1>
-
+    <div>
+        <h1>Data Sources</h1>
+    </div>
+    <div class="list-group">
     {% for source in sources %}
-    <ul>
-    <li><a href="http://localhost:8501/?source_id={{source.id}}">{{source.name}}</a></li>
-    </ul>
+        <a href="http://localhost:8501/?source_id={{source.id}}" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+            <img src="/static/icons/{{source.type}}.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+            
+            <div class="d-flex gap-2 w-100 justify-content-between">
+                <div>
+                  <h6 class="mb-0">{{source.name}}</h6>
+                  <p class="mb-0 opacity-75">{{source.location}}</p>
+                </div>
+                <small class="opacity-50 text-nowrap">{{source.type}}</small>
+            </div>
+        </a>
     {% endfor %}
+    </div>
 {% endblock %}

@@ -1,3 +1,4 @@
+from entities.source import BigQuerySource
 import streamlit as st
 from streamlit_ace import st_ace
 #from lib.code import *
@@ -19,6 +20,10 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+from web import Assets
+
+st.components.v1.html(Assets.logo(1))
+
 query_params = st.experimental_get_query_params()
 logging.info(query_params)
 sources = Source.all()
@@ -32,9 +37,12 @@ except BaseException as err:
   logging.error(err)
   source_id = 1
 
-st.header('Feature engineering')
 s = Source.find_by_id(int(source_id))
-df = s.dataframe()
+
+df = None
+with st.spinner(f"Loading data from {type(s).__name__}"):
+  df = s.dataframe()
+
 st.dataframe(df)
 
 st.subheader("Put your code here")
@@ -72,5 +80,3 @@ if content is not None and len(content) > 0:
     st.dataframe(o_df)
 
     st.button('Save')
-
-st.button('Create')

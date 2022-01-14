@@ -27,6 +27,15 @@ cur.execute("""
 INSERT INTO source(name, location, type) VALUES(?, ?, ?)
 """, ("iris", sql, "sqlite"))
 
+
+bigquery = """
+SELECT * FROM `prosper-mlops-poc.Features.tbl_features_all`
+"""
+
+cur.execute("""
+INSERT INTO source(name, location, type) VALUES(?, ?, ?)
+""", ("Big Query example", bigquery, "bigquery"))
+
 # Save (commit) the changes
 con.commit()
 

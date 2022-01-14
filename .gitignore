@@ -2,3 +2,6 @@
 .venv
 data/*
 *.db
+*.log
+.credentials/*
+.DS_Store
