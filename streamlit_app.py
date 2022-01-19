@@ -11,6 +11,24 @@ from libs.nuclio import *
 logging.basicConfig(filename='logs/test.log', encoding='utf-8', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+st.sidebar.markdown("""
+# Transformers
+
+[Ratio](http://localhost:8070/projects/test/functions/go-json-parse/code)
+""")
+
+st.sidebar.code("""
+Ratio()
+  .request(
+    row, 
+    ["SepalLength", "SepalWidth"]
+  ) 
+""")
+
+st.sidebar.markdown("""
+[Create new](http://localhost:8070/projects/test/functions)
+""")
+
 st.markdown("""
 <style>
 /* The input itself */
