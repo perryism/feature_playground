@@ -7,10 +7,11 @@ app = Flask(__name__)#, static_url_path='', static_folder=static_folder)
 from entities import Source
 from flask import render_template 
 from .libs.csv_uploader import CsvUploader 
+from web.decorators import decorate_source
 
 @app.route('/')
 def index():
-    return render_template("root/index.tmpl.html", sources=Source.all()) 
+    return render_template("root/index.tmpl.html", sources=[ decorate_source(s) for s in Source.all()] ) 
 
 @app.route("/source/new", methods=["GET", "POST"])
 def upload():
