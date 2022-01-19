@@ -1,3 +1,4 @@
+from entities.source import Api
 from flask import Flask, flash, request, redirect, url_for
 import os
 
@@ -32,9 +33,14 @@ def upload():
             #filename = SourceUploader(app.config['UPLOAD_FOLDER']).save(file)
             return redirect("/")
     else:
-        return render_template("source/index.tmpl.html")
+        return render_template("source/new.tmpl.html")
 
-@app.route("/source/<int:source_id>", methods=["GET", "POST"])
+@app.route("/source/<int:source_id>", methods=["GET"])
 def source(source_id):
     source = Source.find_by_id(source_id)
     return render_template("source/view.tmpl.html", source=source) 
+
+@app.route("/api_source/<int:source_id>", methods=["GET"])
+def api_source(source_id):
+    source = Source.find_by_id(source_id)
+    return render_template("source/api_definition.tmpl.html", source=source) 

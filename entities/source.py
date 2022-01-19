@@ -44,6 +44,8 @@ class Source:
             return BigQuerySource(id=row[0], name=row[1], location=row[2])
         elif row[3] == "sqlite":
             return SqlSource(id=row[0], name=row[1], location=row[2])
+        elif row[3] == "api":
+            return Api(id=row[0], name=row[1], location=row[2])
 
     @classmethod
     def create(cls, name, df):
@@ -67,7 +69,6 @@ class SqlSource:
         cnx = sqlite3.connect("data/iris.sqlite")
         return pd.read_sql_query("SELECT * FROM iris", cnx)
 
-
 from google.cloud import bigquery
 
 """
@@ -86,3 +87,11 @@ class BigQuerySource:
         bqclient = bigquery.Client()
         #FIXME: the limit is a bit hacky
         return bqclient.query("%s LIMIT %d"%(self.location, limit)).result().to_dataframe()
+
+
+@dataclass
+class Api:
+    id: int
+    name: str
+    location: str
+    type: str = "api"

@@ -36,6 +36,11 @@ cur.execute("""
 INSERT INTO source(name, location, type) VALUES(?, ?, ?)
 """, ("Big Query example", bigquery, "bigquery"))
 
+
+cur.execute("""
+INSERT INTO source(name, location, type) VALUES(?, ?, ?)
+""", ("Sample api", "http://localhost:4000/get", "api"))
+
 # Save (commit) the changes
 con.commit()
 
