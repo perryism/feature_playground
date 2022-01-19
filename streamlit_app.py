@@ -75,8 +75,14 @@ if content is not None and len(content) > 0:
         for index, row in df.iterrows():
             new_values.append(process(row))
 
-        return pd.DataFrame(new_values)
+        return pd.DataFrame(new_values, columns=[func_name])
     o_df = materialize(df, process)
-    st.dataframe(o_df)
 
-    st.button('Save')
+    new_df = pd.concat([o_df, df], axis=1)
+    st.dataframe(new_df)
+    st.download_button("Download dataframe", data=new_df.to_csv().encode('utf-8'), file_name="new.csv")
+
+    st.subheader("Create new source")
+    n = st.text_input("Data source name")    
+    if st.button('Create'):
+      Source.create(n, new_df)

@@ -12,7 +12,7 @@ from .libs.csv_uploader import CsvUploader
 def index():
     return render_template("root/index.tmpl.html", sources=Source.all()) 
 
-@app.route("/source/", methods=["GET", "POST"])
+@app.route("/source/new", methods=["GET", "POST"])
 def upload():
     #https://flask.palletsprojects.com/en/2.0.x/patterns/fileuploads/
     if request.method == 'POST':

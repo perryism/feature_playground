@@ -45,6 +45,13 @@ class Source:
         elif row[3] == "sqlite":
             return SqlSource(id=row[0], name=row[1], location=row[2])
 
+    @classmethod
+    def create(cls, name, df):
+        location = os.path.join("data", f"{name}.csv")
+        df.to_csv(location, index=False)
+        cls.insert(name=name, location=location, type="csv")
+
+
     def dataframe(self):
         return pd.read_csv(self.location)
 
